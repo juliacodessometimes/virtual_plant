@@ -1,62 +1,77 @@
 import tkinter as tk
+from PIL import ImageTk,Image
 
 lastClickX = 0
 lastClickY = 0
-impath = 'C://Users/pantalaimon/Desktop/PlantGame/pyplant/img/'
+impath = '../virtual_plant/img/'
 
-class App:
-    #creates parent window 
-    def __init__(self, window, label):
+root = tk.Tk()
+label = tk.Label(root, bd=0, bg='white')
 
-        self.root = window
+#call the plant gif as a list of images
+#new and happy plant, 4 frames:
+happy_1 = [tk.PhotoImage(file=impath+'happy_1.gif',format = 'gif -index %i' %(i)) for i in range(5)]
 
-        #call the plant gif as a list of images
-        self.happy_1 = [tk.PhotoImage(file=impath+'happy_1.gif',format = 'gif -index %i' %(i)) for i in range(4)] #new and happy plant, 4 frames      
+def save_last_click_pos(event):
+    global lastClickX, lastClickY
+    lastClickX = event.x
+    lastClickY = event.y
 
-        #plant window configuration
-        self.root.config(highlightbackground='white')
-        self.label = label
-        self.root.overrideredirect(True)
-        self.root.attributes('-topmost', True)
-        self.root.bind('<Button-1>', self.save_last_click_pos)
-        self.root.bind('<B1-Motion>', self.dragging)
-        self.root.wm_attributes('-transparentcolor','white')
-        self.root.after(0, self.update, 0)
+def dragging(event):
+    x, y = event.x - lastClickX + root.winfo_x(), event.y - lastClickY + root.winfo_y()
+    root.geometry("+%s+%s" % (x , y))
 
-        #popup menu
-        self.popup_menu = tk.Menu(self.root, tearoff = 0)
-        self.popup_menu.add_command(label = "save and quit", command = self.root.destroy)
-        self.root.bind("<Button-3>",self.do_popup)
-        self.label.pack()
+#making the gif run
+def update(ind):
+    frame = happy_1[ind]
+    ind += 1
+    if ind > 4:
+        ind = 0
+    label.configure(image=frame)
+    root.after(250, update, ind)
 
-    #allowing you to drag/drop transparent window
-    def save_last_click_pos(self, event):
-        global lastClickX, lastClickY
-        lastClickX = event.x
-        lastClickY = event.y
+def popup(event):
+    #popup menu
+    global menu_img, water_img, exit_img, exit_press_img
 
-    def dragging(self, event):
-        x, y = event.x - lastClickX + self.root.winfo_x(), event.y - lastClickY + self.root.winfo_y()
-        self.root.geometry("+%s+%s" % (x , y))
+    #reading in menu and button images
+    menu_img = ImageTk.PhotoImage(Image.open(impath+'menu.jpg'))
+    water_img = ImageTk.PhotoImage(Image.open (impath+'water.jpg'))
+    exit_img = ImageTk.PhotoImage(Image.open (impath+'exit.jpg'))
+    exit_press_img = ImageTk.PhotoImage(Image.open (impath+'exit_pressed.jpg'))
 
-    #making the gif run
-    def update(self, ind):
-        frame = self.happy_1[ind]
-        ind += 1
-        print("happy_1", ind)
-        if ind > 3:
-            ind = 0
-        self.label.configure(image=frame)
-        self.root.after(250, self.update, ind)
 
-	#display menu on right click 
-    def do_popup(self,event): 
-        try: 
-            self.popup_menu.tk_popup(event.x_root, event.y_root) 
-        finally:
-            self.popup_menu.grab_release() 
+    #setting up popup window
+    top = tk.Toplevel(bd=0, highlightthickness=0)
+    top.overrideredirect(True)
+    top.resizable(False, False)
+    top.attributes('-topmost', True)
+    top.geometry(f'{menu_img.width()}x{menu_img.height()}+{root.winfo_x()-250}+{root.winfo_y()-200}')
+    
+    #making menu image appear
+    canvas = tk.Canvas(top, width=menu_img.width(), height=menu_img.height(), bd=0, highlightthickness=0)
+    canvas.pack(fill="both", expand=True)
+    canvas.create_image(0,0, anchor='nw', image=menu_img)
+    
+    #making the buttons
+    frame = tk.Frame(canvas)
+    canvas.create_window((menu_img.width()-exit_img.width()+8), exit_img.height()-12, window=frame)
+    button = tk.Button(frame, image=exit_img, command=top.destroy, bd=0, highlightthickness=0, anchor="ne")
+    button.pack()
 
-window = tk.Tk()
-label = tk.Label(window, bd=0, bg='white')
-a = App(window, label)
-window.mainloop()
+    
+
+#plant window configuration
+root.config(highlightbackground='white')
+root.overrideredirect(True)
+root.resizable(False, False)
+root.attributes('-topmost', True)
+root.bind('<Button-1>', save_last_click_pos)
+root.bind('<B1-Motion>', dragging)
+root.wm_attributes('-transparentcolor','white')
+root.after(0, update, 0)
+
+label.bind("<Button-3>", popup)
+label.pack()
+
+root.mainloop()
