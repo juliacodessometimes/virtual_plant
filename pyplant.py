@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import ImageTk,Image
+import random
 
 #path to images/gifs
 impath = '../virtual_plant/img/'
@@ -7,6 +8,10 @@ impath = '../virtual_plant/img/'
 #other variables for plant and popup windows
 lastClickX, lastClickY = 0, 0
 lastClickX_top, lastClickY_top = 0, 0
+
+#setting variable for water level
+growth_level = 0
+water_level = 100
 
 #begin the main plant window (root)
 root = tk.Tk()
@@ -27,16 +32,30 @@ exit_press_img = ImageTk.PhotoImage(Image.open (impath+'exit_pressed.jpg'))
 #making the gif run
 label = tk.Label(root, bd=0, bg='white')
 
-def update(ind):
-    frame = happy_1[ind]
-    ind += 1
-    if ind > 4:
-        ind = 0
-    label.configure(image=frame)
-    root.after(250, update, ind)
+def water_function():
+    #adds 1 to the water_level variable
+    global water_level
+    water_level += 1
+    print(f'water level: {water_level}')
+    return water_level
 
-def callback_function():
-    print('pushed')
+def update_function(ind):
+    #happy plant
+    if water_level > 111:
+        frame = happy_1[ind]
+        ind += 1
+        if ind >= 5:
+            ind = 0
+        label.configure(image=frame)
+        root.after(250, update_function, ind)
+    #idle plant
+    else:
+        frame = idle_1[ind]
+        ind += 1
+        if ind >= 3:
+            ind = 0
+        label.configure(image=frame)
+        root.after(1000, update_function, ind)
 
 def save_function():
     #save game function
@@ -89,7 +108,7 @@ def popup_menu_function(event):
 
     def water_release(event):
         water_btn.config(image=water_img)
-        callback_function()
+        water_function()
     
     def savequit_press(event):
         savequit_btn.config(image=savequit_press_img)
@@ -131,7 +150,7 @@ root.attributes('-topmost', True)
 root.bind('<Button-1>', save_last_click_pos)
 root.bind('<B1-Motion>', dragging)
 root.wm_attributes('-transparentcolor','white')
-root.after(0, update, 0)
+root.after(0, update_function, 0)
 
 label.bind("<Button-3>", popup_menu_function)
 label.pack()
