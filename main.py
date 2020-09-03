@@ -131,18 +131,21 @@ exit_img = ImageTk.PhotoImage(Image.open (impath+'exit.jpg'))
 exit_press_img = ImageTk.PhotoImage(Image.open (impath+'exit_pressed.jpg'))
 
 # Path to images/gifs.
-idle_1 = [tk.PhotoImage(file=impath+'idle_1.gif', format = 'gif -index %i' %(i)) for i in range(3)] # A new idle plant, 3 frames
-idle_2 = [tk.PhotoImage(file=impath+'idle_2.gif', format = 'gif -index %i' %(i)) for i in range(6)] # A 2nd stage plant, 6 frames
-happy_1 = [tk.PhotoImage(file=impath+'happy_1.gif', format = 'gif -index %i' %(i)) for i in range(5)] # A new and happy plant, 5 frames
-happy_2 = [tk.PhotoImage(file=impath+'happy_2.gif', format = 'gif -index %i' %(i)) for i in range(7)] #A 2nd stage, happy plant, 7 frames
-grow_1 = [tk.PhotoImage(file=impath+'grow_1.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A new and growing plant, 10 frames
+idle_0 = [tk.PhotoImage(file=impath+'idle_0.gif', format = 'gif -index %i' %(i)) for i in range(3)] # A new idle plant, 3 frames
+idle_1 = [tk.PhotoImage(file=impath+'idle_1.gif', format = 'gif -index %i' %(i)) for i in range(6)] # A 1st stage plant, 6 frames
+idle_2 = [tk.PhotoImage(file=impath+'idle_2.gif', format = 'gif -index %i' %(i)) for i in range(10)] # A 2nd stage plant, 6 frames
+happy_0 = [tk.PhotoImage(file=impath+'happy_0.gif', format = 'gif -index %i' %(i)) for i in range(5)] # A new and happy plant, 5 frames
+happy_1 = [tk.PhotoImage(file=impath+'happy_1.gif', format = 'gif -index %i' %(i)) for i in range(7)] #A 2nd stage, happy plant, 7 frames
+happy_2 = [tk.PhotoImage(file=impath+'happy_2.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A 2nd stage, happy plant, 10 frames
+grow_0 = [tk.PhotoImage(file=impath+'grow_0.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A new and growing plant, 10 frames
+grow_1 = [tk.PhotoImage(file=impath+'grow_1.gif', format = 'gif -index %i' %(i)) for i in range(8)] #A new and growing plant, 8 frames
 
 # Each index in mapping represents a plant mood
 # Each list item contains animation frames corresponding to the plant's mood at various stages of growth
 mapping = {
-        "idle": [idle_1, idle_2],
-        "happy": [happy_1, happy_2],
-        "grow": [grow_1, grow_1]
+        "idle": [idle_0, idle_1, idle_2],
+        "happy": [happy_0, happy_1, happy_2],
+        "grow": [grow_0, grow_1]
 }
 
 # Label that holds the plant images
