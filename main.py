@@ -20,6 +20,8 @@ def draw():
 
     label.configure(image=get_current_frame(plant))
 
+    print(plant.age)
+
 def get_current_frame(plant):
     image_list = mapping[plant.mood][plant.growth_stage]
     return image_list[plant.current_index]

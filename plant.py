@@ -23,7 +23,7 @@ class Plant:
         self.growth_stage = 0
         self.mood = "idle"
         self.new_mood = "idle"
-        self.age = 0
+        self.age = 0 # Plant age at the current stage
 
         # Thresholds for moods
         self.happy_threshold = 160
@@ -80,6 +80,7 @@ class Plant:
             if self.mood == "grow" and self.new_mood == "idle":
                 self.growth_stage += 1            
                 self.water_level = 100
+                self.age = 0
             self.mood = self.new_mood
             self.current_index = 0
             self.time_elapsed = 0
