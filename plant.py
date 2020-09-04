@@ -1,16 +1,16 @@
 class Plant:
     config = {
         "idle": {
-            "time_per_frame": [500, 500, 500],
-            "number_of_frames": [3, 6, 10],
+            "time_per_frame": [500, 500, 500, 500],
+            "number_of_frames": [3, 6, 10, 12],
          },
         "happy": {
-            "time_per_frame": [250, 250, 250],
-            "number_of_frames": [5, 7, 10],
+            "time_per_frame": [250, 250, 250, 250],
+            "number_of_frames": [5, 7, 10, 11],
         },
         "grow": {
-            "time_per_frame": [250, 250],
-            "number_of_frames": [10, 8],
+            "time_per_frame": [250, 250, 250],
+            "number_of_frames": [10, 8, 10],
         }
 
     }
@@ -57,7 +57,7 @@ class Plant:
             self.new_mood = "idle"
         
         # Changing between happy and grow
-        if self.age > 200 and self.mood == "happy" and self.growth_stage != 2:
+        if self.age > 200 and self.mood == "happy" and self.growth_stage != 3:
             self.new_mood = "grow"
 
         if self.mood == "grow":
