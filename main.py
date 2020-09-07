@@ -17,10 +17,7 @@ def update(delta):
 
 def draw():
     # Draw the plant.
-
     label.configure(image=get_current_frame(plant))
-
-    print(plant.age)
 
 def get_current_frame(plant):
     image_list = mapping[plant.mood][plant.growth_stage]
@@ -30,11 +27,11 @@ def water_function():
     plant.add_water(50)
 
 def save_function():
-    #save game function placeholder
+    # Save game function (placeholder)
     print('saved')
 
 def popup_menu_function(event):
-    #popup menu function
+    # Initiates the popup menu
     global top, menu_img, water_img, water_press_img, savequit_img, savequit_press_img, exit_img, exit_press_img, lastClickX_top, lastClickY_top
 
     if top is not None:
@@ -58,22 +55,21 @@ def popup_menu_function(event):
     top.bind('<B1-Motion>', dragging_top)
     top.geometry(f'{menu_img.width()}x{menu_img.height()}+{root.winfo_x()-250}+{root.winfo_y()-200}')
 
-    #making menu image appear
+    # Makes menu image and button images appear
     canvas = tk.Canvas(top, width=menu_img.width(), height=menu_img.height(), bd=0, highlightthickness=0)
     canvas.pack(fill="both", expand=True)
     canvas.create_image(0,0, anchor='nw', image=menu_img)
     
-    #making the buttons
     exit_btn = tk.Label(canvas, image=exit_img, bd=0, highlightthickness=0)
     water_btn = tk.Label(canvas, image=water_img, bd=0, highlightthickness=0)
     savequit_btn = tk.Label(canvas, image=savequit_img, bd=0, highlightthickness=0)
     
-    #placing the buttons
+    # Placing the buttons
     exit_btn.place(x=368, y=8, anchor='nw')
     water_btn.place(x=(menu_img.width()/2)-(water_img.width()/2), y=water_img.height(), anchor='nw')
     savequit_btn.place(x=(menu_img.width()/2)-(water_img.width()/2), y=(water_img.height()*3.5), anchor='sw')
 
-    #defining button image change functions
+    # Defining button image change functions
     def water_press(event):
         water_btn.config(image=water_press_img)
 
@@ -96,7 +92,7 @@ def popup_menu_function(event):
         exit_btn.config(image=exit_img)
         top.destroy()
 
-    #binding buttons to mouse click/release
+    # Binding buttons to mouse click/release
     water_btn.bind('<ButtonPress-1>', water_press)
     water_btn.bind('<ButtonRelease-1>', water_release)
     savequit_btn.bind('<ButtonPress-1>', savequit_press)
@@ -112,8 +108,6 @@ def save_last_click_pos(event):
 def dragging(event):
     x, y = event.x - lastClickX + root.winfo_x(), event.y - lastClickY + root.winfo_y()
     root.geometry("+%s+%s" % (x , y))
-
-
 
 
 root = tk.Tk()
@@ -158,7 +152,7 @@ label = tk.Label(root, bd=0, bg='white')
 
 plant = Plant()
 
-#plant window configuration
+# Plant window configuration
 root.config(highlightbackground='white')
 root.overrideredirect(True)
 root.resizable(False, False)
