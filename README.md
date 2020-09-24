@@ -7,8 +7,8 @@
 
  Right click your plant to give it water and show it love <3
 
-Keep it happy and watch it grow!
+Keep it happy and watch it grow! Neglect it for long enough and see it shrivel up :(
 
 
- Transparent window only works on Windows (for now)
+ Transparent window only works on Windows (for now). Drying out speeds are slightly sped up for testing purposes.
 
