@@ -1,9 +1,11 @@
 import tkinter as tk
+import os
+import fnmatch
 from PIL import ImageTk,Image
-import random
 from plant import Plant
 
-impath = '../virtual_plant/img/'
+impath = "../virtual_plant/img/"
+gifpath = "../virtual_plant/gifs/"
 
 def gameloop():
     delta = 100
@@ -19,12 +21,29 @@ def draw():
     # Draw the plant.
     label.configure(image=get_current_frame(plant))
 
+    print(plant.mood, plant.new_mood, plant.config["number_of_frames"][plant.new_mood][plant.growth_stage])
+
 def get_current_frame(plant):
     image_list = mapping[plant.mood][plant.growth_stage]
     return image_list[plant.current_index]
 
+def gif_info (string):
+    # Gets the mood, growth stage, and number of frames for each gif file
+    split = string.split("_")
+    gif_mood = split[0]
+    gif_stage = split[1]
+    gif_frames_num = split[2]
+
+    return gif_mood, int(gif_stage), int(gif_frames_num)
+
+def frame_list (file_name):
+    # Creates list of images from the selected gif file
+    frame_number = gif_info(str(file_name))[2]
+    gif = [tk.PhotoImage(file=gifpath+str(file_name), format = 'gif -index %i' %(i)) for i in range(frame_number)]
+    return gif
+
 def water_function():
-    plant.add_water(50)
+    plant.add_water(40)
 
 def save_function():
     # Save game function (placeholder)
@@ -126,26 +145,25 @@ savequit_press_img = ImageTk.PhotoImage(Image.open (impath+'savequit_pressed.jpg
 exit_img = ImageTk.PhotoImage(Image.open (impath+'exit.jpg'))
 exit_press_img = ImageTk.PhotoImage(Image.open (impath+'exit_pressed.jpg'))
 
-# Path to images/gifs.
-idle_0 = [tk.PhotoImage(file=impath+'idle_0.gif', format = 'gif -index %i' %(i)) for i in range(3)] # A new idle plant, 3 frames
-idle_1 = [tk.PhotoImage(file=impath+'idle_1.gif', format = 'gif -index %i' %(i)) for i in range(6)] # A 1st stage plant, 6 frames
-idle_2 = [tk.PhotoImage(file=impath+'idle_2.gif', format = 'gif -index %i' %(i)) for i in range(10)] # A 2nd stage plant, 6 frames
-idle_3 = [tk.PhotoImage(file=impath+'idle_3.gif', format = 'gif -index %i' %(i)) for i in range(12)] # A 2nd stage plant, 6 frames
-happy_0 = [tk.PhotoImage(file=impath+'happy_0.gif', format = 'gif -index %i' %(i)) for i in range(5)] # A new and happy plant, 5 frames
-happy_1 = [tk.PhotoImage(file=impath+'happy_1.gif', format = 'gif -index %i' %(i)) for i in range(7)] #A 2nd stage, happy plant, 7 frames
-happy_2 = [tk.PhotoImage(file=impath+'happy_2.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A 2nd stage, happy plant, 10 frames
-happy_3 = [tk.PhotoImage(file=impath+'happy_3.gif', format = 'gif -index %i' %(i)) for i in range(11)] #A 2nd stage, happy plant, 10 frames
-grow_0 = [tk.PhotoImage(file=impath+'grow_0.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A new and growing plant, 10 frames
-grow_1 = [tk.PhotoImage(file=impath+'grow_1.gif', format = 'gif -index %i' %(i)) for i in range(8)] #A new and growing plant, 8 frames
-grow_2 = [tk.PhotoImage(file=impath+'grow_2.gif', format = 'gif -index %i' %(i)) for i in range(10)] #A new and growing plant, 8 frames
-
 # Each index in mapping represents a plant mood
 # Each list item contains animation frames corresponding to the plant's mood at various stages of growth
 mapping = {
-        "idle": [idle_0, idle_1, idle_2, idle_3],
-        "happy": [happy_0, happy_1, happy_2, happy_3],
-        "grow": [grow_0, grow_1, grow_2]
+        "dead": [],
+        "shrivel": [],
+        "droop": [],
+        "limp": [],
+        "perk": [],
+        "idle": [],
+        "happy": [],
+        "grow": []
 }
+
+
+for file_name in sorted(os.listdir(gifpath)):
+    mood, stage, frames = gif_info(file_name)
+
+    mapping[mood].append(frame_list(file_name))
+    Plant.config["number_of_frames"][mood].append(int(frames))
 
 # Label that holds the plant images
 label = tk.Label(root, bd=0, bg='white')
